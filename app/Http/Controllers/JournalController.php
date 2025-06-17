@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Journal;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class JournalController extends Controller
 {
@@ -13,7 +14,18 @@ class JournalController extends Controller
      */
     public function index()
     {
-        //
+        $journal = Journal::where('user_id', Auth::id())
+        ->get();
+
+    return view('journal', compact('journal'));
+    }
+    public function menulis()
+    {
+        // $planners = BeautyPlanner::where('user_id', Auth::id())
+        // ->orderBy('scheduled_at', 'asc')
+        // ->get();
+
+    return view('menulis');
     }
 
     /**
@@ -29,7 +41,19 @@ class JournalController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'judul' => 'required|string|max:255',
+            'isi' => 'required|string',
+        ]);
+
+        Journal::create([
+            'user_id' => Auth::id(),
+            'judul' => $validated['judul'],
+            'isi' => $validated['isi'],
+        ]);
+        
+
+        return redirect()->back()->with('success', 'Jurnal berhasil disimpan!');
     }
 
     /**
@@ -59,8 +83,11 @@ class JournalController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Journal $journal)
+    public function destroy($id)
     {
-        //
+        $journal = Journal::findOrFail($id);
+        $journal->delete();
+
+        return redirect()->route('journal.index')->with('successs', 'Journal berhasil dihapus.');
     }
 }

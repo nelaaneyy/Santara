@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JavaneseText:wght@400&display=swap" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Italianno:wght@400&display=swap" />
 
+
 </head>
 
 <body>
@@ -31,8 +32,21 @@
 
             <h1 class="form-title">Sign In</h1>
             <p class="form-subtitle">Welcome back! Please enter your details.</p>
+            @if (session('success'))
+                <div class="alert alert-success">{{ session('success') }}</div>
+            @endif
 
-            <form id="loginForm" onsubmit="handleLogin(event)">
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul style="margin: 0; padding-left: 20px;">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+            <form method="POST" action="{{ route('login') }}">
+                @csrf
                 <div class="form-group">
                     <label for="email">Email</label>
                     <input type="email" id="email" name="email" required>
@@ -49,7 +63,8 @@
                     <div class="remember-me">
                         <input type="checkbox" id="rememberMe" name="rememberMe">
                         <label for="rememberMe">Remember me</label>
-                        <a href="{{ url('/forgotpassword') }}" class="forgot-password-link" onclick="handleForgotPassword(event)">Forgot Password</a>
+                        <a href="{{ url('/forgotpassword') }}" class="forgot-password-link"
+                            onclick="handleForgotPassword(event)">Forgot Password</a>
                     </div>
                 </div>
 
@@ -57,7 +72,7 @@
             </form>
 
             <div class="signup-link">
-                Don't Have an Account? <a href="{{ url('/signup') }}">Sign Up</a>
+                Don't Have an Account? <a href="{{ route('register.show') }}">Sign Up</a>
             </div>
         </div>
 
@@ -69,7 +84,6 @@
             </div>
         </div>
     </div>
-
     <script>
         function handleLogin(event) {
             event.preventDefault();
@@ -109,17 +123,17 @@
             const password = document.getElementById('password').value;
             const strengthBar = document.getElementById('passwordStrengthBar');
             const passwordInput = document.getElementById('password');
-            
+
             let strength = 0;
-            
+
             // Check password criteria
             if (password.length >= 8) strength += 25;
             if (password.match(/[a-z]/)) strength += 25;
             if (password.match(/[A-Z]/)) strength += 25;
             if (password.match(/[0-9]/) || password.match(/[^a-zA-Z0-9]/)) strength += 25;
-            
+
             strengthBar.style.width = strength + '%';
-            
+
             // Update input styling based on strength
             if (strength < 50) {
                 passwordInput.classList.remove('valid');
@@ -142,22 +156,63 @@
 
         // Add input focus animations
         document.querySelectorAll('input').forEach(input => {
-            input.addEventListener('focus', function () {
+            input.addEventListener('focus', function() {
                 this.parentElement.style.transform = 'translateY(-2px)';
             });
 
-            input.addEventListener('blur', function () {
+            input.addEventListener('blur', function() {
                 this.parentElement.style.transform = 'translateY(0)';
             });
         });
 
         // Keyboard navigation
-        document.addEventListener('keydown', function (event) {
+        document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape') {
                 closeModal();
             }
         });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+
+    <script>
+        @if (session('succes'))
+            Swal.fire({
+                title: 'Logout Berhasil 🎉',
+                text: 'Jangan Lupa Datang Kembali🙂',
+                icon: 'success',
+                confirmButtonText: 'Lanjut',
+                background: '#fefefe',
+                color: '#333',
+                confirmButtonColor: '#4CAF50',
+                backdrop: `rgba(0,0,0,0.5)`
+            });
+        @endif
+        @if (session('success'))
+            Swal.fire({
+                title: 'Registrasi Berhasil 🎉',
+                text: 'Silahkan Login 🤗',
+                icon: 'success',
+                confirmButtonText: 'Lanjut',
+                background: '#fefefe',
+                color: '#333',
+                confirmButtonColor: '#4CAF50',
+                backdrop: `rgba(0,0,0,0.5)`
+            });
+        @endif
+
+        @if ($errors->any())
+            Swal.fire({
+                title: 'Login Gagal 😢',
+                html: `{!! implode('<br>', $errors->all()) !!}`,
+                icon: 'error',
+                confirmButtonText: 'Coba Lagi',
+                background: '#fff0f0',
+                color: '#c0392b',
+                confirmButtonColor: '#e74c3c',
+                backdrop: `rgba(255,0,0,0.2)`
+            });
+        @endif
     </script>
 
 </body>

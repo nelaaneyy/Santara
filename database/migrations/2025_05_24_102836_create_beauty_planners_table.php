@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('beauty_planners', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('activity'); // ngapain
+            $table->date('scheduled_at'); // jadwalnya (tanggal saja)
+            $table->boolean('is_done')->default(false); // apakah sudah dilakukan
             $table->timestamps();
         });
     }

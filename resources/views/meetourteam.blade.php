@@ -13,34 +13,53 @@
         href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,400;1,300;1,500;1,600;1,800&display=swap" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Javanese Text:wght@400&display=swap" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Italianno:wght@400&display=swap" />
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
 </head>
 
 <body>
-<header class="header">
-        <nav class="navbartop">
-            <ul class="nav-links" id="navLinks">
-                <li class="navli"><a href="#" class="nav-a">Favourite</a></li>
-                <li class="navli"><a href="#" class="nav-a">Bookmark</a></li>
-                <li class="navli"><a href="#" class="nav-a">Beauty Planner</a></li>
-                <li class="navli"><a href="#" class="nav-a">Rekomendasi & Tips</a></li>
-                <li class="navli"><a href="#" class="nav-a">Mood & Love Journal</a></li>
-                <li class="navli"><a href="#" class="nav-a">Edukasi</a></li>
-            </ul>
-        </nav>
-        <nav class="navbar">
+    <header class="main-header">
+        <div class="top-header-bar">
+            <div class="top-left-links">
+                <a href="{{ route('favorit.index') }}">Favourite</a>
+                <a href="{{ route('bookmark.index') }}">Bookmark</a>
+            </div>
+            <div class="top-right-links">
+                <a href="{{ route('home') }}">Home</a>
+                <a href="{{ route('team') }}">Meet Our Team</a>
+                <a href="{{ route('profile') }}">Profile</a>
+                <div class="dropdown-settings">
+                    <a href="#" class="dropdown-toggle">Settings ▼</a>
+                    <ul class="dropdown-content">
+                        <li><a href="{{ route('profile.edit') }}">Edit Profile</a></li>
+                        <li>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                style="display: none;">
+                                @csrf
+                            </form>
+                            <a href="#"
+                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-banner">
+            {{-- FIXED: Logo changed to image --}}
             <div class="logo">
-                <img src="{{ asset('santaralogo.png') }}" alt="santaralogo">
+                <img src="{{ asset('images/icons/logo.png') }}" alt="Santara Logo" class="santara-logo-img">
+                <h1 class="javanese-font">Start Slayy, Start Santara !</h1>
             </div>
-            <div style="display: flex; align-items: center; gap: 1rem;">
-                <a href="{{ url('/signup') }}" class="auth-btn">
-                    Login or Signup
-                </a>
-                <button class="mobile-menu-btn" onclick="toggleMenu()">
-                    <i class="fas fa-bars"></i>
-                </button>
+
+            {{-- FIXED: Profile photo and username --}}
+            <div class="profile-auth">
+                <img src="{{ asset('images/photos/Userprofil.png') }}" alt="User Profile" class="profile-photo">
+                @if (Auth::check())
+                    <span class="profile-name">{{ Auth::user()->name }}!</span>
+                @endif
             </div>
-        </nav>
+        </div>
     </header>
 
     <!-- Main Content -->
@@ -49,7 +68,8 @@
         <section class="hero-section">
             <h1 class="hero-title">Meet the team that makes <br> the magic happen</h1>
             <p class="hero-description">
-                Meet our diverse team of designers, back end and UI developers who bring creativity and expertise to every project.
+                Meet our diverse team of designers, back end and UI developers who bring creativity and expertise to
+                every project.
             </p>
         </section>
 
@@ -86,14 +106,16 @@
             <!-- Team Member 2 -->
             <div class="team-card" data-category="Back-End">
                 <div class="card-image">
-                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop&crop=face" alt="Backend Developer">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop&crop=face"
+                        alt="Backend Developer">
                     <div class="card-overlay"></div>
                 </div>
                 <div class="card-content">
                     <h3 class="member-name">Backend</h3>
                     <p class="member-role">Senior Backend Developer</p>
                     <p class="member-description">
-                        Mengembangkan arsitektur server yang robust dan API yang efisien untuk mendukung semua fitur aplikasi.
+                        Mengembangkan arsitektur server yang robust dan API yang efisien untuk mendukung semua fitur
+                        aplikasi.
                     </p>
                     <div class="social-links">
                         <a href="#" class="social-link"><i class="fab fa-github"></i></a>
@@ -113,7 +135,8 @@
                     <h3 class="member-name">UI/UX Researcher</h3>
                     <p class="member-role">Lead UX Designer</p>
                     <p class="member-description">
-                        Meneliti kebutuhan pengguna dan merancang pengalaman yang intuitif untuk meningkatkan kepuasan pengguna.
+                        Meneliti kebutuhan pengguna dan merancang pengalaman yang intuitif untuk meningkatkan kepuasan
+                        pengguna.
                     </p>
                     <div class="social-links">
                         <a href="#" class="social-link"><i class="fab fa-dribbble"></i></a>
@@ -133,7 +156,8 @@
                     <h3 class="member-name">UI/UX Student Makerz</h3>
                     <p class="member-role">Junior UI Designer</p>
                     <p class="member-description">
-                        Mahasiswa yang bersemangat dalam bidang desain, berkontribusi dengan ide-ide segar dan perspektif baru.
+                        Mahasiswa yang bersemangat dalam bidang desain, berkontribusi dengan ide-ide segar dan
+                        perspektif baru.
                     </p>
                     <div class="social-links">
                         <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
@@ -144,7 +168,7 @@
             </div>
 
             <!-- Team Member 5 -->
-            <div class="team-card" data-category="Designer">
+            <div class="team-card" data-category="Front-End">
                 <div class="card-image">
                     <img src="{{ asset('depala.jpg') }}" alt="UI/UX Agentic React">
                     <div class="card-overlay"></div>
@@ -153,7 +177,8 @@
                     <h3 class="member-name">Agentic Analisis React</h3>
                     <p class="member-role">Frontend Specialist</p>
                     <p class="member-description">
-                        Spesialis dalam pengembangan antarmuka yang reaktif dan analisis user behavior untuk optimasi pengalaman.
+                        Spesialis dalam pengembangan antarmuka yang reaktif dan analisis user behavior untuk optimasi
+                        pengalaman.
                     </p>
                     <div class="social-links">
                         <a href="#" class="social-link"><i class="fab fa-react"></i></a>
@@ -176,11 +201,11 @@
         function filterTeam(category) {
             const cards = document.querySelectorAll('.team-card');
             const buttons = document.querySelectorAll('.filter-btn');
-            
+
             // Update active button
             buttons.forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
-            
+
             // Filter cards
             cards.forEach(card => {
                 if (category === 'all' || card.dataset.category === category) {
@@ -194,7 +219,7 @@
 
         // Smooth scroll for navigation
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
+            anchor.addEventListener('click', function(e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
@@ -210,7 +235,7 @@
         document.addEventListener('click', function(event) {
             const navLinks = document.getElementById('navLinks');
             const mobileBtn = document.querySelector('.mobile-menu-btn');
-            
+
             if (!navLinks.contains(event.target) && !mobileBtn.contains(event.target)) {
                 navLinks.classList.remove('active');
             }

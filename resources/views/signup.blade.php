@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,82 +12,88 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JavaneseText:wght@400&display=swap" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Italianno:wght@400&display=swap" />
 </head>
+
 <body>
     <div class="signup-container">
-            <button class="close-btn" onclick="closeModal()">&times;</button>
-            
-            <div class="form-section">
-                <div class="logo">
-                    <div class="logo-santara">
-                        <img src="{{ asset('santaralogo.png') }}" alt="">
-                    </div>
-                    <div class="logo-text">Santara</div>
+        <button class="close-btn" onclick="closeModal()">&times;</button>
+
+        <div class="form-section">
+            <div class="logo">
+                <div class="logo-santara">
+                    <img src="{{ asset('santaralogo.png') }}" alt="">
                 </div>
-                
-                <h1 class="form-title">Sign Up</h1>
-                <p class="form-subtitle">Sign up and gain access to Santara</p>
-                
-                <form id="signupForm" onsubmit="handleSignup(event)">
-                    <div class="form-group">
-                        <label class="form-label" for="email">Email</label>
-                        <input 
-                            type="email" 
-                            id="email" 
-                            class="form-input" 
-                            required
-                            placeholder="Enter your email address"
-                        >
-                        <div class="error-message" id="emailError"></div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label" for="password">Password</label>
-                        <input 
-                            type="password" 
-                            id="password" 
-                            class="form-input" 
-                            required
-                            placeholder="Create a password"
-                            oninput="checkPasswordStrength()"
-                        >
-                        <div class="password-strength">
-                            <div class="password-strength-bar" id="passwordStrengthBar"></div>
-                        </div>
-                        <div class="error-message" id="passwordError"></div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label" for="confirmPassword">Confirm Password</label>
-                        <input 
-                            type="password" 
-                            id="confirmPassword" 
-                            class="form-input" 
-                            required
-                            placeholder="Confirm your password"
-                            oninput="checkPasswordMatch()"
-                        >
-                        <div class="error-message" id="confirmPasswordError"></div>
-                    </div>
-                    
-                    <button type="submit" class="signup-btn">Sign Up</button>
-                </form>
-                
-                <div class="sign-in-link">
-                    Have an Account? <a href="{{ url('/login') }}">Sign In</a>
-                </div>
+                <div class="logo-text">Santara</div>
             </div>
-            
-            <div class="image-section">
+
+            <h1 class="form-title">Sign Up</h1>
+            <p class="form-subtitle">Sign up and gain access to Santara</p>
+
+            <form id="signupForm" action="{{ route('register.perform') }}" method="POST">
+                @csrf
+                <div class="form-group">
+                    <label class="form-label" for="email">Email</label>
+                    <input type="email" id="email" name="email" class="form-input" required
+                        placeholder="Enter your email address">
+                    <div class="error-message" id="emailError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="name">Nama</label>
+                    <input type="text" id="name" name="name" class="form-input" required
+                        placeholder="Enter your full name">
+                    <div class="error-message" id="nameError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="password">Password</label>
+                    <input type="password" id="password" name="password" class="form-input" required
+                        placeholder="Create a password" oninput="checkPasswordStrength()">
+                    <div class="password-strength">
+                        <div class="password-strength-bar" id="passwordStrengthBar"></div>
+                    </div>
+                    <div class="error-message" id="passwordError"></div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="password_confirmation">Confirm Password</label>
+                    <input type="password" id="password_confirmation" name="password_confirmation" class="form-input"
+                        required placeholder="Confirm your password" oninput="checkPasswordMatch()">
+                    <div class="error-message" id="confirmPasswordError"></div>
+                </div>
+
+                <button type="submit" class="signup-btn">Sign Up</button>
+            </form>
+
+
+            <div class="sign-in-link">
+                Have an Account? <a href="{{ url('/login') }}">Sign In</a>
+            </div>
+        </div>
+
+        <div class="image-section">
             <div class="image-overlay">
                 <div class="model-placeholder">
                     <img src="{{ asset('loginimage.png') }}" alt="">
                 </div>
             </div>
         </div>
-        </div>
     </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
+        @if ($errors->any())
+            Swal.fire({
+                title: 'Login Gagal 😢',
+                html: `{!! implode('<br>', $errors->all()) !!}`,
+                icon: 'error',
+                confirmButtonText: 'Coba Lagi',
+                background: '#fff0f0',
+                color: '#c0392b',
+                confirmButtonColor: '#e74c3c',
+                backdrop: `rgba(255,0,0,0.2)`
+            });
+        @endif
         // Close modal function
         function closeModal() {
             const modal = document.querySelector('.modal-overlay');
@@ -108,17 +115,17 @@
             const password = document.getElementById('password').value;
             const strengthBar = document.getElementById('passwordStrengthBar');
             const passwordInput = document.getElementById('password');
-            
+
             let strength = 0;
-            
+
             // Check password criteria
             if (password.length >= 8) strength += 25;
             if (password.match(/[a-z]/)) strength += 25;
             if (password.match(/[A-Z]/)) strength += 25;
             if (password.match(/[0-9]/) || password.match(/[^a-zA-Z0-9]/)) strength += 25;
-            
+
             strengthBar.style.width = strength + '%';
-            
+
             // Update input styling based on strength
             if (strength < 50) {
                 passwordInput.classList.remove('valid');
@@ -135,7 +142,7 @@
             const confirmPassword = document.getElementById('confirmPassword').value;
             const confirmInput = document.getElementById('confirmPassword');
             const errorMsg = document.getElementById('confirmPasswordError');
-            
+
             if (confirmPassword.length > 0) {
                 if (password !== confirmPassword) {
                     confirmInput.classList.add('invalid');
@@ -153,33 +160,33 @@
         // Handle form submission
         function handleSignup(event) {
             event.preventDefault();
-            
+
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirmPassword').value;
-            
+
             // Basic validation
             let isValid = true;
-            
+
             // Email validation
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
                 showError('emailError', 'Please enter a valid email address');
                 isValid = false;
             }
-            
+
             // Password validation
             if (password.length < 8) {
                 showError('passwordError', 'Password must be at least 8 characters long');
                 isValid = false;
             }
-            
+
             // Confirm password validation
             if (password !== confirmPassword) {
                 showError('confirmPasswordError', 'Passwords do not match');
                 isValid = false;
             }
-            
+
             if (isValid) {
                 // Simulate successful signup
                 alert('Sign up successful! Welcome to Santara!');
@@ -192,7 +199,7 @@
             const errorElement = document.getElementById(elementId);
             errorElement.textContent = message;
             errorElement.classList.add('show');
-            
+
             setTimeout(() => {
                 errorElement.classList.remove('show');
             }, 5000);
@@ -214,4 +221,5 @@
         document.head.appendChild(style);
     </script>
 </body>
+
 </html>

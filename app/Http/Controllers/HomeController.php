@@ -1,12 +1,18 @@
 <?php
+
 namespace App\Http\Controllers;
 
-use Illuminate\View\View;
+use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    public function index(): View
+    /**
+     * Menampilkan halaman home.
+     */
+    public function index()
     {
-        return view('home');
+         $artikels = \App\Models\Artikel::latest()->take(5)->get(); // Batasi 5 jika ingin seperti sebelumnya
+    return view('home', compact('artikels'));
+        // return view('home');
     }
 }

@@ -13,7 +13,13 @@ return new class extends Migration
     {
         Schema::create('journals', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id'); // Foreign key ke users
+            $table->string('judul');
+            $table->text('isi');
             $table->timestamps();
+
+            // Relasi ke tabel users
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

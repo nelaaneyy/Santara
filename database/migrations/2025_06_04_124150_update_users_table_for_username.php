@@ -6,21 +6,21 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
-    {
-     Schema::table('users', function (Blueprint $table) {
-    $table->string('username')->unique()->after('name');
-    });
-    }
+    // /**
+    //  * Run the migrations.
+    //  */
+    // public function up(): void
+    // {
+    //  Schema::table('users', function (Blueprint $table) {
+    // $table->string('username')->unique()->after('name');
+    // });
+    // }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
-    {
-        //
-    }
+    // /**
+    //  * Reverse the migrations.
+    //  */
+    // public function down(): void
+    // {
+    //     //
+    // }
 };

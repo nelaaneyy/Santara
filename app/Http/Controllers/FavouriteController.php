@@ -3,8 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Favourite;
+// use App\Models\Favorite;
+use App\Models\Artikel;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+
+
 
 class FavouriteController extends Controller
 {
@@ -13,7 +19,17 @@ class FavouriteController extends Controller
      */
     public function index()
     {
-        //
+        // $journal = Journal::where('user_id', Auth::id())
+        // ->get();
+        $userId = Auth::id();
+
+        // Ambil daftar artikel yang difavoritkan oleh user
+        $artikelFavorit = Artikel::whereHas('favourite', function ($query) use ($userId) {
+            $query->where('user_id', $userId);
+        })->latest()->get();
+
+        // Kirim ke view
+        return view('favorit', compact('artikelFavorit'));
     }
 
     /**
@@ -29,7 +45,7 @@ class FavouriteController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
     }
 
     /**
@@ -63,4 +79,20 @@ class FavouriteController extends Controller
     {
         //
     }
+    public function favorite(Request $request)
+{
+    $userId = auth()->id();
+    $artikelId = $request->input('artikel_id');
+
+    // Simpan ke tabel favorites (pastikan tabel & relasi sudah ada)
+    DB::table('favorites')->insert([
+        'user_id' => $userId,
+        'artikel_id' => $artikelId,
+        'created_at' => now(),
+        'updated_at' => now(),
+    ]);
+
+    return redirect()->back()->with('success', 'Artikel ditambahkan ke favorit!');
+}
+
 }
